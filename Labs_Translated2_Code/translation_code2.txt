@@ -1,0 +1,87 @@
+#lab: Creating Virtual Machines 
+
+## Objectives
+In this lab you will learn how to perform the following tasks:
+     - Create a utility virtual machine
+
+     - Create a Windows virtual machine
+
+     - Create a custom virtual machine
+
+## STEPS 
+
+Task1: Create a utility virtual machine
+       
+   gcloud compute instances create instance-1 --zone=us-central1-c --machine-type=n1-standard-1  --image-project "debain-cloud" --image "debian-9-stretch-v-20190213"
+   --subnet=default  --no-address --boot-disk-size=100GB --boot-disk-type=pd-standard
+
+   - Explore the VM details
+
+     1. On the VM instances page, click on the name of your VM
+
+     2. Locate CPU platform and note the value. Click Edit :
+
+        Notice that you can't change the machine type, the CPU platform, or the zone.
+
+     3. Examine Availability policies.
+
+     4. click cancel
+
+   - Explore the VM logs
+
+     1. On the VM instance details page for your VM, click Stackdriver Logging
+
+     2. Click the small triangle to the left of one of the lines to see the kind of information it contains    
+
+     3. On the far right, click View Options > Expand All.
+
+Task 2: Create a Windows virtual machine
+
+        gcloud compute instances create instance-2 --zone=europe-west2-a --machine-type=n1-standard-1 --image=windows-server-2016-dc-core-v20200813 --image-project=windows-cloud --boot-disk-size=100GB --boot-disk-type=pd-ssd 
+        --subnet=default --tags=http-server,https-server 
+
+       - Creating the firewall rules for http and https
+
+         gcloud compute --project=qwiklabs-gcp-03-55884dd4d503 firewall-rules create default-allow-http --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:80 --source-ranges=0.0.0.0/0 --target-tags=http-server
+
+         gcloud compute --project=qwiklabs-gcp-03-55884dd4d503 firewall-rules create default-allow-https --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:443 --source-ranges=0.0.0.0/0 --target-tags=https-serve
+
+
+      - Set the password for the VM
+     
+          1. Click on the name of your Windows VM to access the VM instance details.
+
+          2. You don't have a valid password for this Windows VM: you cannot log in to the Windows VM without a password. Click Set Windows password.
+
+          3. Click Set.
+
+          4. Copy the provided password, and click CLOSE.
+
+Task 3: Create a custom virtual machine
+
+        gcloud compute instances create my-custom-vm --zone=us-west1-b --machine-type=custom-[6]-[34] --subnet=default 
+        --image=debian-9-stretch-v20200902 --image-project=debian-cloud 
+
+      - Connect via SSH to your custom VM
+
+         1. For the custom VM you just created, click SSH.
+
+         2. To see information about unused and used memory and swap space on your custom VM, run the following command:
+
+            free
+
+         3. To see details about the RAM installed on your VM, run the following command:
+
+            sudo dmidecode -t 17
+
+         4. To verify the number of processors, run the following command:
+
+            nproc
+
+         5. To see details about the CPUs installed on your VM, run the following command:
+
+            lscpu
+
+         6. To exit the SSH terminal, run the following command:
+
+            exit   
